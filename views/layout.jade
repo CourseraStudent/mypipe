@@ -4,6 +4,10 @@ html
     title= title
     link(rel='stylesheet', href='/stylesheets/style.css')
     script(src='http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
-    script(src='/javascripts/main.js')
+    script(src='/javascripts/react.min.js')
+    script(src='/javascripts/react-dom.min.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.min.js')
+    script(src='/javascripts/react-mypipe-components.js', type='text/babel')
+    script(src='/javascripts/main.js', type='text/babel')
   body
     block content

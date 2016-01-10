@@ -1,9 +1,18 @@
 $(document).ready(function() {
-    debugger;
-	createChannelList();
+    // debugger;
+	createChannelListReact();
 });
 
-function createChannelList() {
+function createChannelListReact() {
+    $.getJSON( '/channels/list', function( data ) {    
+        var container = document.getElementById('channelList');
+        // window.setTimeout(function() {
+            window.createChannelList(container, data);
+        // }, 0);
+    });
+}
+
+function createChannelListJQuery() {
 
     var tableContent = '';
 
@@ -27,4 +36,4 @@ function createChannelList() {
         $('#channelList ul ').html(tableContent);
 
     });
-};
+}
