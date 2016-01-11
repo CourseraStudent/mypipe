@@ -13,20 +13,19 @@ var Channel = React.createClass({
 
 var ChannelList = React.createClass({
   render: function() {
-    var channels = this.props.ChannelList;
+    var list = this.props.ChannelList.map(function(channel) {
       return (
-        <ul>
-          {
-            channels.map(function(channel) {
-              return (
-                <li>
-                  <Channel name={channel.name} icon={channel.icon} />
-                </li>
-              )
-            })
-          }
-        </ul>
-      );
+        <li>
+          <Channel name={channel.name} icon={channel.icon} />
+        </li>
+      )
+    });
+
+    return (
+      <ul>
+        {list}
+      </ul>
+    );
   }
 });
 
