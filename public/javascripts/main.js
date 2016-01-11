@@ -28,7 +28,6 @@ var view = (function(m, componentRenderHelper) {
   }
   function onChannelChanged() {
     var activeChannel = channelListComponent.getActiveChannel();
-    alert(activeChannel.name);
     //model.loadChannelVideoList(onChannelListLoaded);
   }
 
