@@ -6,4 +6,6 @@
     http://getbootstrap.com/examples/offcanvas/#
   Bootstrap other
     http://getbootstrap.com/getting-started/
- 
+
+  React.js docs
+    https://facebook.github.io/react/docs/jsx-in-depth.html
