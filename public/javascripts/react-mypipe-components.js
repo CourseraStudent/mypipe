@@ -12,7 +12,28 @@ var Channel = React.createClass({
 
 
 var ChannelList = React.createClass({
+  getInitialState: function() {
+    return { 
+      'ActiveChannelIndex': 0,
+    }
+  },
+  getDefaultProps: function() {
+    return {
+      'ChannelList': [ { name: 'loading...', icon: '' } ],
+      'OnChannelChanged': function(){}
+    };
+  },
+
+  getActiveChannel: function() {
+    return this.props.ChannelList[this.state.ActiveChannelIndex];
+  },
+  update: function(ChannelList) {
+    this.setProps({'ChannelList': ChannelList});
+    this.props.onChannelChanged();
+  },
+
   render: function() {
+    console.log('render', this.props)
     var list = this.props.ChannelList.map(function(channel) {
       return (
         <li>
@@ -29,9 +50,19 @@ var ChannelList = React.createClass({
   }
 });
 
-window.createChannelList = function(container, channelData) {
-  ReactDOM.render(
-      <ChannelList ChannelList={channelData} />,
-      container
-    );
-};
+window.componentRenderHelper = (function() {
+  function getContainer(id) {
+    return document.getElementById(id);
+  }
+
+  function renderChannelList(containerID, onChannelChanged) {
+    return ReactDOM.render(
+        <ChannelList onChannelChanged={onChannelChanged} />,
+        getContainer(containerID)
+      );
+  };
+
+  return {
+    'renderChannelList': renderChannelList
+  }
+})();
