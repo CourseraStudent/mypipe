@@ -1,0 +1,9 @@
+  Main page template inspired by
+    http://getbootstrap.com/examples/dashboard/#
+    http://jsfiddle.net/alansouzati/Le24d7py/
+  
+  Bootstrap list
+    http://getbootstrap.com/examples/offcanvas/#
+  Bootstrap other
+    http://getbootstrap.com/getting-started/
+ 
