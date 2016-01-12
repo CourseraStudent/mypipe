@@ -1,5 +1,5 @@
 var model = (function(){
-  var channelListUrl = '/channels/list';
+  var channelListUrl = '/channels';
 
   function loadChannelList(onSuccess) {
     $.getJSON(channelListUrl, onSuccess);

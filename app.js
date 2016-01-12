@@ -9,6 +9,7 @@ var mypipefs = require('mypipe-fs');
 var data = mypipefs('public/videos/');
 
 var routes = require('./routes/index');
+var channel = require('./routes/channel');
 var channels = require('./routes/channels');
 var users = require('./routes/users');
 
@@ -33,6 +34,7 @@ app.use(function(req,res,next){
 });
 
 app.use('/', routes);
+app.use('/channel', channel);
 app.use('/channels', channels);
 app.use('/users', users);
 

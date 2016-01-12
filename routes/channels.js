@@ -1,12 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
-router.get('/list', function(req, res) {
+//youtube route examples:
+//https://www.youtube.com/channel/UC6EjqyJwE1JXEgff-jrrxZw
+//https://www.youtube.com/user/SERSHANT2/videos
+//https://www.youtube.com/user/SERSHANT2/playlists    
+
+router.get('/', function(req, res) {
   var mypipefs = req.mypipefs;
-
-  res.json(mypipefs.getChannels());
+  var channelList = mypipefs.getChannelList()
+  res.json(channelList);
 });
-
 
 // res.send
 // /* GET users listing. */
