@@ -9,14 +9,14 @@ var model = (function(){
       }, 0);
     });
   }
-  function loadChannelVideoList(channelId, onSuccess) {
+  function loadChannelInfo(channelId, onSuccess) {
     var channelVideoListUrl = channelUrl + '/' + channelId;
     $.getJSON(channelVideoListUrl, onSuccess);
   }
 
   return {
     'loadChannelList': loadChannelList,
-    'loadChannelVideoList': loadChannelVideoList
+    'loadChannelInfo': loadChannelInfo
   };
 })();
 
@@ -45,11 +45,11 @@ var view = (function(m, componentRenderHelper) {
   function onChannelChanged() {
     var activeChannel = getChannelListComponent().getActiveChannel();
     var activeChannelId = activeChannel.id;
-    model.loadChannelVideoList(activeChannelId, onVideoListLoaded);
+    model.loadChannelInfo(activeChannelId, onVideoListLoaded);
   }
-  function onVideoListLoaded(videos) {
+  function onVideoListLoaded(channelInfo) {
     var videoListComponent = getVideoListComponent();
-    videoListComponent.update(videos);
+    videoListComponent.update(channelInfo.videos);
   }
   function onVideoChanged(){
     var choosenVideo = getVideoListComponent().getChoosenVideo();

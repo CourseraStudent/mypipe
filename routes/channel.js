@@ -6,9 +6,9 @@ router.get('/:id', function(req, res) {
 
   var channelId = req.params.id;
 
-  var videos = mypipefs.getChannelVideos(channelId);
+  var channelInfo = mypipefs.getChannelInfo(channelId);
   
-  res.json(videos);
+  res.json(channelInfo);
 });
 
 
