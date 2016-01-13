@@ -1,4 +1,3 @@
-
 var Channel = React.createClass({
   onClickInternal: function() {
     this.props.onClick(this.props.dataMember);
@@ -7,7 +6,7 @@ var Channel = React.createClass({
   render: function () {
     var onClickInternal = this.onClickInternal;
     return (
-      <div onClick={onClickInternal}>
+      <div onClick={onClickInternal} className={this.props.active}>
         <div>{this.props.icon}</div>
         <span>{this.props.name}</span>
         <span>[{this.props.active}]</span>
@@ -16,8 +15,7 @@ var Channel = React.createClass({
   }
 });
 
-
-var ChannelList = React.createClass({
+window.ChannelList = React.createClass({
   getInitialState: function() {
     return { 
       'ActiveChannel': null
@@ -41,17 +39,17 @@ var ChannelList = React.createClass({
     return this.state.ActiveChannel;
   },
   onChannelClicked: function(channel) {
-    this.setState({ 'ActiveChannel': channel});
-    this.props.OnChannelChanged(channel);
-
+    this.setState({ 'ActiveChannel': channel}, function() {
+      this.props.OnChannelChanged(channel);
+    });
   },
-  areChannelEqual: function(channel1, channel2) {
+  areChannelsEqual: function(channel1, channel2) {
     var eq = channel1 == channel2 || 
         channel1.name == channel2.name;
     return eq;
   },
   isChannelActive: function(channel) {
-    return this.areChannelEqual(this.state.ActiveChannel, channel) ?
+    return this.areChannelsEqual(this.state.ActiveChannel, channel) ?
       'active' : '';
   },
 
@@ -59,7 +57,6 @@ var ChannelList = React.createClass({
     if(!this.state.ActiveChannel && this.props.ChannelList.length > 0)
       this.setActiveChannelSilently(this.props.ChannelList[0]);
     
-    var onChannelClicked = this.onChannelClicked;
     var that = this; // TODO find a better solution
     var list = this.props.ChannelList.map(function(channel) {
       return (
@@ -81,20 +78,3 @@ var ChannelList = React.createClass({
     );
   }
 });
-
-window.componentRenderHelper = (function() {
-  function getContainer(id) {
-    return document.getElementById(id);
-  }
-
-  function renderChannelList(containerID, onChannelChanged) {
-    return ReactDOM.render(
-        <ChannelList OnChannelChanged={onChannelChanged} />,
-        getContainer(containerID)
-      );
-  };
-
-  return {
-    'renderChannelList': renderChannelList
-  }
-})();

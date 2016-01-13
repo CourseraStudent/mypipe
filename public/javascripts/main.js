@@ -1,18 +1,29 @@
 var model = (function(){
   var channelListUrl = '/channels';
+  var channelUrl = '/channel';
 
   function loadChannelList(onSuccess) {
-    $.getJSON(channelListUrl, onSuccess);
+    $.getJSON(channelListUrl, function(args) {
+      window.setTimeout(function(){
+        onSuccess(args);
+      }, 0);
+    });
+  }
+  function loadChannelVideoList(channelId, onSuccess) {
+    var channelVideoListUrl = channelUrl + '/' + channelId;
+    $.getJSON(channelVideoListUrl, onSuccess);
   }
 
   return {
-    'loadChannelList': loadChannelList
+    'loadChannelList': loadChannelList,
+    'loadChannelVideoList': loadChannelVideoList
   };
 })();
 
 var view = (function(m, componentRenderHelper) {
   var model = m;
   var channelListComponent = null;
+  var videoListComponent = null;
 
   function refreshChannelList() {
     model.loadChannelList(onChannelListLoaded);
@@ -22,13 +33,28 @@ var view = (function(m, componentRenderHelper) {
       channelListComponent = componentRenderHelper.renderChannelList('channelList', onChannelChanged);
     return channelListComponent;
   }
+  function getVideoListComponent() {
+    if(!videoListComponent)
+      videoListComponent = componentRenderHelper.renderVideoList('videoList', onVideoChanged);
+    return videoListComponent;
+  }
   function onChannelListLoaded(channelList) {
     var channelListComponent = getChannelListComponent();
     channelListComponent.update(channelList);
   }
   function onChannelChanged() {
-    var activeChannel = channelListComponent.getActiveChannel();
-    //model.loadChannelVideoList(onChannelListLoaded);
+    var activeChannel = getChannelListComponent().getActiveChannel();
+    var activeChannelId = activeChannel.id;
+    model.loadChannelVideoList(activeChannelId, onVideoListLoaded);
+  }
+  function onVideoListLoaded(videos) {
+    var videoListComponent = getVideoListComponent();
+    videoListComponent.update(videos);
+  }
+  function onVideoChanged(){
+    var choosenVideo = getVideoListComponent().getChoosenVideo();
+    var choosenVideoId = choosenVideo.id;
+    //playVideo(choosenVideoId);
   }
 
   return {
