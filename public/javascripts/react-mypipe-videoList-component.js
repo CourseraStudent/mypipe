@@ -6,9 +6,10 @@ var Video = React.createClass({
 
   render: function () {
     var onClickInternal = this.onClickInternal;
+    var iconUrl = this.props.channelDirectory + "/" + this.props.icon;
     return (
       <div onClick={onClickInternal} className={this.props.active}>
-        <img src={this.props.icon}/>
+        <img src={iconUrl}/>
         <span>{this.props.name}</span>
       </div>
     );
@@ -25,13 +26,16 @@ window.VideoList = React.createClass({
   getDefaultProps: function() {
     return {
       'VideoList': [],
+      'channelInfo': {},
       'OnVideoChoosenChanged': function(){ console.log('click was not handled'); }
     };
   },
 
-  update: function(VideoList) {
-    this.setProps({'VideoList': VideoList});
-    this.props.OnVideoChoosenChanged(VideoList[0]);
+  update: function(channelInfo) {
+    this.setProps({'channelInfo': channelInfo});
+    this.setProps({'VideoList': channelInfo.videos});
+    var defaultVideo = channelInfo.videos[0];
+    this.props.OnVideoChoosenChanged(defaultVideo);
   },
   setChoosenVideoSilently: function(video) {
     this.state.ChoosenVideo = video;
@@ -59,6 +63,8 @@ window.VideoList = React.createClass({
       this.setChoosenVideoSilently(this.props.VideoList[0]);
     
     var onVideoClicked = this.onVideoClicked;
+    var channelDirectory = this.props.channelInfo.channelDirectory;
+    console.log(channelDirectory);
     var that = this; // TODO find a better solution
     var list = this.props.VideoList.map(function(video) {
       return (
@@ -68,7 +74,8 @@ window.VideoList = React.createClass({
             icon={video.icon} 
             active={that.isVideoActive(video)}
             onClick={that.onVideoClicked} 
-            dataMember={video} />
+            dataMember={video}
+            channelDirectory = {channelDirectory} />
         </li>
       )
     });

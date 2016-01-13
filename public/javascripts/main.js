@@ -49,7 +49,7 @@ var view = (function(m, componentRenderHelper) {
   }
   function onVideoListLoaded(channelInfo) {
     var videoListComponent = getVideoListComponent();
-    videoListComponent.update(channelInfo.videos);
+    videoListComponent.update(channelInfo);
   }
   function onVideoChanged(){
     var choosenVideo = getVideoListComponent().getChoosenVideo();
