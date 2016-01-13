@@ -72,8 +72,11 @@ body {
 
 #player {
 	background-color: red;
+  margin: auto;
 	width: 854px;
 	height: 480px;
+}
+#player > div {
 }
 
 #videoList {
@@ -87,6 +90,7 @@ body {
 }
 #videoList li {
   display: inline-block;
+  margin: 5px;
 }
 #videoList li > div {
   width: 196px;
@@ -97,13 +101,30 @@ body {
 #videoList img {
   width: 196px;
   height: 110px;
+  margin-bottom: 4px;
 }
 
+#videoList span {
+  width: 176px;
+  height: 31px;
+  display:block;
+  line-height:1.3em;
+  overflow:hidden;
+  position:relative;
+  text-overflow:ellipsis;
+  white-space:normal;
+  word-wrap:break-word;
+  color: rgb(22, 122, 198);
+  font-family: Roboto, arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16.9px;
+}
 
-.preview {
+/*.preview {
 	width: 196px;
 	height: 189px;
 	border: 1px solid red;
 	padding: 2px;
 	float: left;
-}
+}*/

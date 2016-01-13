@@ -8,7 +8,7 @@ var Video = React.createClass({
     var onClickInternal = this.onClickInternal;
     var iconUrl = this.props.channelDirectory + "/" + this.props.icon;
     return (
-      <div onClick={onClickInternal} className={this.props.active}>
+      <div onClick={onClickInternal} className={this.props.active} title={this.props.name}>
         <img src={iconUrl}/>
         <span>{this.props.name}</span>
       </div>
