@@ -65,15 +65,28 @@ body {
   color: #fff;
   background-color: #428bca;
 }
+#channelList li:hover {
+  color: #000;
+  background-color: #ddd;
+}
 
 #player {
 	background-color: red;
 	width: 854px;
 	height: 480px;
 }
+
 #videoList {
 	background-color: yellow;
 	overflow: hidden;
+}
+
+#videoList ul {
+
+}
+#videoList img {
+  width: 196px;
+  height: 110px;
 }
 
 
