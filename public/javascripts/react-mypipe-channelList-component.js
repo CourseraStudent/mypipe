@@ -6,12 +6,13 @@ var Channel = React.createClass({
   render: function () {
     var onClickInternal = this.onClickInternal;
     return (
-      <div onClick={onClickInternal} className={this.props.active}>
-        <div>{this.props.icon}</div>
-        <span>{this.props.name}</span>
-        <span>[{this.props.active}]</span>
-      </div>
-    );
+            <li className={this.props.active}>
+              <div onClick={onClickInternal}>
+                <div>{this.props.icon}</div>
+                <span>{this.props.name}</span>
+              </div>
+            </li>
+            );
   }
 });
 
@@ -45,12 +46,12 @@ window.ChannelList = React.createClass({
   },
   areChannelsEqual: function(channel1, channel2) {
     var eq = channel1 == channel2 || 
-        channel1.name == channel2.name;
+    channel1.name == channel2.name;
     return eq;
   },
   isChannelActive: function(channel) {
     return this.areChannelsEqual(this.state.ActiveChannel, channel) ?
-      'active' : '';
+    'active' : '';
   },
 
   render: function() {
@@ -60,21 +61,19 @@ window.ChannelList = React.createClass({
     var that = this; // TODO find a better solution
     var list = this.props.ChannelList.map(function(channel) {
       return (
-        <li>
-          <Channel 
-            name={channel.name} 
-            icon={channel.icon} 
-            active={that.isChannelActive(channel)}
-            onClick={that.onChannelClicked} 
-            dataMember={channel} />
-        </li>
-      )
+              <Channel 
+                name={channel.name} 
+                icon={channel.icon} 
+                active={that.isChannelActive(channel)}
+                onClick={that.onChannelClicked} 
+                dataMember={channel} />
+              )
     });
 
     return (
-      <ul>
-        {list}
-      </ul>
-    );
+            <ul className={"nav nav-sidebar"}>
+              {list}
+            </ul>
+            );
   }
 });
