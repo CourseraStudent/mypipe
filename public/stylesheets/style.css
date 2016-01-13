@@ -82,7 +82,17 @@ body {
 }
 
 #videoList ul {
-
+  display: block;
+  list-style-type: none;
+}
+#videoList li {
+  display: inline-block;
+}
+#videoList li > div {
+  width: 196px;
+  height: 175px;
+  word-wrap:break-word;
+  overflow: hidden;
 }
 #videoList img {
   width: 196px;
