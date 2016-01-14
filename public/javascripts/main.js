@@ -93,14 +93,28 @@ var playerWrapper = (function(playerElementSelector){
     }
   }
 
+  function createPlayList(src) {
+    if(src instanceof Array) {
+      var playList = {};
+      for(var i = 0; i < src.length; i++) {
+        playList[i.toString()] = 
+          {
+            'src': src[i], 
+            'type': 'video/mp4'
+          };
+      }
+      return playList;
+    } else return { 
+      0:{
+       'src': src, 
+       'type': 'video/mp4'
+      } 
+    };
+  }
+
   function setVideoSrc(src) {
     ensurePlayer(function(player){
-      var video = { 
-        0:{
-         'src': src, 
-         'type': 'video/mp4'
-        } 
-      };
+      var video = createPlayList(src);
       setSingleVideoAndPlayNow(player, video)
     });
   }
