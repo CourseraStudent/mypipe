@@ -54,22 +54,41 @@ var view = (function(m, componentRenderHelper) {
   function onVideoListLoaded(channelInfo) {
     var videoListComponent = getVideoListComponent();
     videoListComponent.update(channelInfo);
+
+    var playList = playListHelper.createPlayListFromChannelInfo(channelInfo);
+    playerWrapper.setPlayList(playList);
   }
   function onVideoChanged(){
     var activeChannelId = getActiveChannelId();
     var choosenVideo = getVideoListComponent().getChoosenVideo();
     var choosenVideoId = choosenVideo.id;
     var videoSrc = 'channel/' + activeChannelId + '/' + choosenVideoId
-    playVideo(videoSrc);
+    playSingle(videoSrc);
   }
-  function playVideo(videoSrc) {
-    playerWrapper.setVideoSrc(videoSrc);
+  function playSingle(videoSrc) {
+    playerWrapper.playSingle(videoSrc);
   }
 
   return {
     'refreshChannelList': refreshChannelList
   };
 })(model, window.componentRenderHelper);
+
+var playListHelper = (function(){
+  function createPlayListFromChannelInfo(channelInfo) {
+    var playList = [];
+    var videos = channelInfo.videos;
+    var baseUrl = "channel/" + channelInfo.channelId + "/";
+    for(var i = 0; i < videos.length; i++) {
+      playList.push(baseUrl + videos[i].fileId);
+    }
+    return playList;
+  }
+  return {
+    'createPlayListFromChannelInfo': createPlayListFromChannelInfo
+  };  
+})()
+
 
 var playerWrapper = (function(playerElementSelector){
   var player = null;
@@ -94,39 +113,48 @@ var playerWrapper = (function(playerElementSelector){
   }
 
   function createPlayList(src) {
-    if(src instanceof Array) {
-      var playList = {};
-      for(var i = 0; i < src.length; i++) {
-        playList[i.toString()] = 
-          {
-            'src': src[i], 
-            'type': 'video/mp4'
-          };
-      }
-      return playList;
-    } else return { 
-      0:{
-       'src': src, 
-       'type': 'video/mp4'
-      } 
-    };
+    src = src instanceof Array ? src : [src];
+    return createPlayListFromArray(src);
+  }
+  function createPlayListFromArray(src) {
+    var playList = [];
+    for(var i = 0; i < src.length; i++) {
+      playList.push( 
+        {0:{
+          'src': src[i], 
+          'type': 'video/mp4'
+        }});
+    }
+    return playList;
   }
 
-  function setVideoSrc(src) {
+  function play(src, playStrategy) {
     ensurePlayer(function(player){
       var video = createPlayList(src);
-      setSingleVideoAndPlayNow(player, video)
+      playStrategy(player, video)
     });
   }
   function setSingleVideoAndPlayNow(player, video) {
-    player.setItem(video, 0, true);
+    player.reset();
+    player.setItem(video[0], 0, true);
     player.setPlay();
   }
-  function setPlayList(videos) {
+  function setPlayListAndPlayNow(player, playList){
+    for(var i = 0; i < playList.length; i++) {
+      player.setItem(playList[i]);
+    }
+    player.setPlay();
+  }
+
+  function playSingle(src) {
+    play(src, setSingleVideoAndPlayNow);
+  }
+  function setPlayList(playList) {
+    play(playList, setPlayListAndPlayNow);
   }
 
   return {
-    'setVideoSrc': setVideoSrc,
+    'playSingle': playSingle,
     'setPlayList': setPlayList
   };
 })("#player");

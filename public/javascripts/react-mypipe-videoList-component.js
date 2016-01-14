@@ -37,7 +37,7 @@ window.VideoList = React.createClass({
         'VideoList': channelInfo.videos
       }, function(){
           var defaultVideo = channelInfo.videos[0];
-          this.props.OnVideoChoosenChanged(defaultVideo);
+          // this.props.OnVideoChoosenChanged(defaultVideo);
         }
       );
   },
