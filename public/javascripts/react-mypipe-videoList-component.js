@@ -7,10 +7,15 @@ var Video = React.createClass({
   render: function () {
     var onClickInternal = this.onClickInternal;
     var iconUrl = '/channel' + '/' + this.props.channelId + '/' + this.props.iconId;
+    var postDate = new Date(this.props.date.year, this.props.date.month - 1, this.props.date.day);
+    var timeDiff = Math.abs((new Date()).getTime() - postDate.getTime());
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));     
     return (
       <div onClick={onClickInternal} className={this.props.active} title={this.props.name}>
         <img src={iconUrl}/>
         <span>{this.props.name}</span>
+        <span>{diffDays + " days ago"}</span>
+        <span>{this.props.date.year + '.' + this.props.date.month + '.' + this.props.date.day}</span>
       </div>
     );
   }
@@ -77,7 +82,8 @@ window.VideoList = React.createClass({
             active={that.isVideoActive(video)}
             onClick={that.onVideoClicked} 
             dataMember={video}
-            channelId = {that.props.channelInfo.channelId} />
+            channelId = {that.props.channelInfo.channelId}
+            date={video.date} />
         </li>
       );
     });
