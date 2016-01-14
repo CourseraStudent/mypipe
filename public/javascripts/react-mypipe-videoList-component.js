@@ -6,7 +6,7 @@ var Video = React.createClass({
 
   render: function () {
     var onClickInternal = this.onClickInternal;
-    var iconUrl = this.props.channelDirectory + "/" + this.props.icon;
+    var iconUrl = '/channel' + '/' + this.props.channelId + '/' + this.props.iconId;
     return (
       <div onClick={onClickInternal} className={this.props.active} title={this.props.name}>
         <img src={iconUrl}/>
@@ -32,10 +32,15 @@ window.VideoList = React.createClass({
   },
 
   update: function(channelInfo) {
-    this.setProps({'channelInfo': channelInfo});
-    this.setProps({'VideoList': channelInfo.videos});
-    var defaultVideo = channelInfo.videos[0];
-    this.props.OnVideoChoosenChanged(defaultVideo);
+    this.setProps(
+      {
+        'channelInfo': channelInfo,
+        'VideoList': channelInfo.videos
+      }, function(){
+          var defaultVideo = channelInfo.videos[0];
+          this.props.OnVideoChoosenChanged(defaultVideo);
+        }
+      );
   },
   setChoosenVideoSilently: function(video) {
     this.state.ChoosenVideo = video;
@@ -63,21 +68,19 @@ window.VideoList = React.createClass({
       this.setChoosenVideoSilently(this.props.VideoList[0]);
     
     var onVideoClicked = this.onVideoClicked;
-    var channelDirectory = this.props.channelInfo.channelDirectory;
-    console.log(channelDirectory);
     var that = this; // TODO find a better solution
     var list = this.props.VideoList.map(function(video) {
       return (
         <li>
           <Video 
             name={video.name} 
-            icon={video.icon} 
+            iconId={video.iconId} 
             active={that.isVideoActive(video)}
             onClick={that.onVideoClicked} 
             dataMember={video}
-            channelDirectory = {channelDirectory} />
+            channelId = {that.props.channelInfo.channelId} />
         </li>
-      )
+      );
     });
 
     return (
