@@ -16,7 +16,6 @@ var Video = React.createClass({
   }
 });
 
-
 window.VideoList = React.createClass({
   getInitialState: function() {
     return { 
