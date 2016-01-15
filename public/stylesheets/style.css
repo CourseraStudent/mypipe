@@ -105,20 +105,33 @@ body {
 }
 
 #videoList span {
-  width: 176px;
-  height: 31px;
+  width: 196px;
   display:block;
   line-height:1.3em;
+  font-family: Roboto, arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16.9px;
+}
+#videoList .name {
+  height: 31px;
   overflow:hidden;
   position:relative;
   text-overflow:ellipsis;
   white-space:normal;
   word-wrap:break-word;
   color: rgb(22, 122, 198);
-  font-family: Roboto, arial, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 16.9px;
+}
+#videoList .diffDate {
+  line-height: 1.3em;
+  color: #777;
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+}
+
+#videoList .date {
+  display: none;
 }
 
 /*.preview {

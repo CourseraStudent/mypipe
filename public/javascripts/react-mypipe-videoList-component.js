@@ -9,13 +9,15 @@ var Video = React.createClass({
     var iconUrl = '/channel' + '/' + this.props.channelId + '/' + this.props.iconId;
     var postDate = new Date(this.props.date.year, this.props.date.month - 1, this.props.date.day);
     var timeDiff = Math.abs((new Date()).getTime() - postDate.getTime());
-    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));     
+    var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24)) + " days ago";    
+    var date = this.props.date.year + '.' + this.props.date.month + '.' + this.props.date.day;
+    var mainClassName = "item " + this.props.active;
     return (
-      <div onClick={onClickInternal} className={this.props.active} title={this.props.name}>
+      <div onClick={onClickInternal} className={mainClassName} title={this.props.name}>
         <img src={iconUrl}/>
-        <span>{this.props.name}</span>
-        <span>{diffDays + " days ago"}</span>
-        <span>{this.props.date.year + '.' + this.props.date.month + '.' + this.props.date.day}</span>
+        <span className='name'>{this.props.name}</span>
+        <span className='diffDate'>{diffDays} </span>
+        <span className='date'>{diffDays}>{date}</span>
       </div>
     );
   }
