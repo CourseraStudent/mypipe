@@ -1,0 +1,143 @@
+body {
+  padding-top: 50px;
+}
+
+.sub-header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.navbar-fixed-top {
+  border: 0;
+}
+
+.sidebar {
+  display: none;
+  background-color: blue;
+  height: 500px;
+}
+@media (min-width: 768px) {
+  .sidebar {
+   position: fixed!important;
+   top: 50px;
+   bottom: 0;
+   left: 0;
+   z-index: 1000;
+   display: block;
+   padding: 20px;
+   overflow-x: hidden;
+   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+   background-color: #f5f5f5;
+   border-right: 1px solid #eee;
+ }
+}
+
+.main {
+  padding: 0 20px 20px 20px;
+}
+@media (min-width: 768px) {
+  .main {
+   padding-right: 40px;
+   padding-left: 40px;
+ }
+}
+.main .page-header {
+  margin-top: 0;
+}
+
+/*.nav-sidebar {
+  margin-right: -21px;
+  margin-bottom: 20px;
+  margin-left: -20px;
+}*/
+
+.row {
+  background-color: green;
+}
+
+#channelList {
+  padding: 10px 0;
+}
+#channelList li > div {
+  padding: 10px 20px;
+}
+#channelList li.active {
+  color: #fff;
+  background-color: #428bca;
+}
+#channelList li:hover {
+  color: #000;
+  background-color: #ddd;
+}
+
+#player {
+  background-color: red;
+  margin: auto;
+  width: 854px;
+  height: 480px;
+}
+#player > div {
+}
+
+#videoList {
+  background-color: yellow;
+  overflow: hidden;
+}
+
+#videoList ul {
+  display: block;
+  list-style-type: none;
+}
+#videoList li {
+  display: inline-block;
+  margin: 5px;
+}
+#videoList li > div {
+  width: 196px;
+  height: 175px;
+  word-wrap:break-word;
+  overflow: hidden;
+}
+#videoList img {
+  width: 196px;
+  height: 110px;
+  margin-bottom: 4px;
+}
+
+#videoList span {
+  width: 196px;
+  display:block;
+  line-height:1.3em;
+  font-family: Roboto, arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 16.9px;
+}
+#videoList .name {
+  height: 31px;
+  overflow:hidden;
+  position:relative;
+  text-overflow:ellipsis;
+  white-space:normal;
+  word-wrap:break-word;
+  color: rgb(22, 122, 198);
+}
+#videoList .diffDate {
+  line-height: 1.3em;
+  color: #777;
+  display: inline-block;
+  width: 100%;
+  text-align: right;
+}
+
+#videoList .date {
+  display: none;
+}
+
+/*.preview {
+  width: 196px;
+  height: 189px;
+  border: 1px solid red;
+  padding: 2px;
+  float: left;
+}*/
