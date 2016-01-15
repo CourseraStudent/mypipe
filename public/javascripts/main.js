@@ -62,7 +62,7 @@ var view = (function(m, componentRenderHelper) {
     var activeChannelId = getActiveChannelId();
     var choosenVideo = getVideoListComponent().getChoosenVideo();
     var choosenVideoId = choosenVideo.id;
-    var videoSrc = 'channel/' + activeChannelId + '/' + choosenVideoId
+    var videoSrc = '/channel/' + activeChannelId + '/' + choosenVideoId
     playSingle(videoSrc);
   }
   function playSingle(videoSrc) {
@@ -78,7 +78,7 @@ var playListHelper = (function(){
   function createPlayListFromChannelInfo(channelInfo) {
     var playList = [];
     var videos = channelInfo.videos;
-    var baseUrl = "channel/" + channelInfo.channelId + "/";
+    var baseUrl = "/channel/" + channelInfo.channelId + "/";
     for(var i = 0; i < videos.length; i++) {
       playList.push(baseUrl + videos[i].fileId);
     }
