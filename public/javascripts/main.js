@@ -137,7 +137,7 @@ var playerWrapper = (function(playerElementSelector){
   function setSingleVideoAndPlayNow(player, video) {
     player.reset();
     player.setItem(video[0], 0, true);
-    player.setPlay();
+    // player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
     if(player.getSource())
@@ -145,7 +145,7 @@ var playerWrapper = (function(playerElementSelector){
     for(var i = 0; i < playList.length; i++) {
       player.setItem(playList[i]);
     }
-    player.setPlay();
+    // player.setPlay();
   }
 
   function playSingle(src) {
