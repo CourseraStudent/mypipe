@@ -140,6 +140,8 @@ var playerWrapper = (function(playerElementSelector){
     player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
+    if(player.getSource())
+      player.reset();
     for(var i = 0; i < playList.length; i++) {
       player.setItem(playList[i]);
     }
