@@ -1,6 +1,6 @@
 var model = (function(){
-  var channelListUrl = '/channels';
-  var channelUrl = '/channel';
+  var channelListUrl = '/channels/';
+  var channelUrl = '/channel/';
 
   function loadChannelList(onSuccess) {
     $.getJSON(channelListUrl, function(args) {
@@ -24,6 +24,8 @@ var view = (function(m, componentRenderHelper) {
   var model = m;
   var channelListComponent = null;
   var videoListComponent = null;
+  var playerWrapperComponent = null;
+  var videoDashboardComponent = null;
 
   function refreshChannelList() {
     model.loadChannelList(onChannelListLoaded);
@@ -37,6 +39,18 @@ var view = (function(m, componentRenderHelper) {
     if(!videoListComponent)
       videoListComponent = componentRenderHelper.renderVideoList('videoList', onVideoChanged);
     return videoListComponent;
+  }
+  function getPlayer() {
+    if(!playerWrapperComponent)
+      playerWrapperComponent = playerWrapper("#player", playedVideoChanged);
+    return playerWrapperComponent;
+  }
+  function getVideoDashboardComponent() {
+    if(!videoDashboardComponent){
+      videoDashboardComponent = componentRenderHelper.renderVideoDashboard('videoDashboard',
+       onVideoDelete, onVideoViewed);
+    }
+    return videoDashboardComponent;
   }
   function onChannelListLoaded(channelList) {
     var channelListComponent = getChannelListComponent();
@@ -56,18 +70,28 @@ var view = (function(m, componentRenderHelper) {
     videoListComponent.update(channelInfo);
 
     var playList = playListHelper.createPlayListFromChannelInfo(channelInfo);
-    playerWrapper.setPlayList(playList);
+    getPlayer().setPlayList(playList);
   }
   function onVideoChanged(){
-    var activeChannelId = getActiveChannelId();
+    var channelId = getActiveChannelId();
     var choosenVideo = getVideoListComponent().getChoosenVideo();
-    var choosenVideoId = choosenVideo.id;
-    var videoSrc = '/channel/' + activeChannelId + '/' + choosenVideoId
-    playSingle(videoSrc);
+    var videoId = choosenVideo.id;
+    var videoSrc = '/channel/' + channelId + '/' + videoId;
+    var playList = playListHelper.createSingleVideoPlayList(channelId, choosenVideo);
+    playSingle(playList);
+
   }
   function playSingle(videoSrc) {
-    playerWrapper.playSingle(videoSrc);
+    getPlayer().playSingle(videoSrc);
   }
+  function playedVideoChanged(videoInfo){
+    var videoDashboardComponent = getVideoDashboardComponent();
+    videoDashboardComponent.update(videoInfo);
+  }
+
+
+  function onVideoDelete() {}
+  function onVideoViewed() {}
 
   return {
     'refreshChannelList': refreshChannelList
@@ -78,19 +102,29 @@ var playListHelper = (function(){
   function createPlayListFromChannelInfo(channelInfo) {
     var playList = [];
     var videos = channelInfo.videos;
-    var baseUrl = "/channel/" + channelInfo.channelId + "/";
-    for(var i = 0; i < videos.length; i++) {
-      playList.push(baseUrl + videos[i].fileId);
-    }
+    var channelId = channelInfo.channelId;
+
+    for(var i = 0; i < videos.length; i++)
+      playList.push(createSingleVideoPlayList(channelId, videos[i]));
     return playList;
   }
+  function createSingleVideoPlayList(channelId, video) {
+    var baseUrl = "/channel/" + channelId + "/";
+    return {
+        'src': baseUrl + video.fileId,
+        'channelId': channelId,
+        'video': video
+    }
+  }
+
   return {
-    'createPlayListFromChannelInfo': createPlayListFromChannelInfo
+    'createPlayListFromChannelInfo': createPlayListFromChannelInfo,
+    'createSingleVideoPlayList': createSingleVideoPlayList
   };  
 })()
 
 
-var playerWrapper = (function(playerElementSelector){
+var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   var player = null;
   function create(onPlayerReady){
     projekktor(playerElementSelector, {
@@ -107,37 +141,45 @@ var playerWrapper = (function(playerElementSelector){
     } else {
       create(function(p) { 
         player = p;
+        player.addListener('*',function(data) {
+            if(data && data.file) {
+              onPlayerVideoChanged(data.file[0]);
+            }
+          }
+        );
         onPlayerReady(player);
       });
     }
   }
 
-  function createPlayList(src) {
-    src = src instanceof Array ? src : [src];
-    return createPlayListFromArray(src);
+  function createPlayList(videos) {
+    videos = videos instanceof Array ? videos : [videos];
+    return createPlayListFromArray(videos);
   }
-  function createPlayListFromArray(src) {
+  function createPlayListFromArray(videos) {
     var playList = [];
-    for(var i = 0; i < src.length; i++) {
+    for(var i = 0; i < videos.length; i++) {
       playList.push( 
         {0:{
-          'src': src[i], 
-          'type': 'video/mp4'
+          'src': videos[i].src, 
+          'type': 'video/mp4',
+          'channelId': videos[i].channelId,
+          'video': videos[i].video
         }});
     }
     return playList;
   }
 
-  function play(src, playStrategy) {
+  function play(videos, playStrategy) {
     ensurePlayer(function(player){
-      var video = createPlayList(src);
-      playStrategy(player, video)
+      var playList = createPlayList(videos);
+      playStrategy(player, playList);
     });
   }
-  function setSingleVideoAndPlayNow(player, video) {
+  function setSingleVideoAndPlayNow(player, playList) {
     player.reset();
-    player.setItem(video[0], 0, true);
-    // player.setPlay();
+    player.setItem(playList[0], 0, true);
+    player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
     if(player.getSource())
@@ -145,21 +187,21 @@ var playerWrapper = (function(playerElementSelector){
     for(var i = 0; i < playList.length; i++) {
       player.setItem(playList[i]);
     }
-    // player.setPlay();
+    player.setPlay();
   }
 
-  function playSingle(src) {
-    play(src, setSingleVideoAndPlayNow);
+  function playSingle(videosInfo) {
+    play(videosInfo, setSingleVideoAndPlayNow);
   }
-  function setPlayList(playList) {
-    play(playList, setPlayListAndPlayNow);
+  function setPlayList(videosInfos) {
+    play(videosInfos, setPlayListAndPlayNow);
   }
 
   return {
     'playSingle': playSingle,
     'setPlayList': setPlayList
   };
-})("#player");
+})/*("#player")*/;
 
 $(document).ready(function() {
   view.refreshChannelList();

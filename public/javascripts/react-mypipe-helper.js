@@ -10,15 +10,24 @@ window.componentRenderHelper = (function() {
       );
   }
 
-  function renderVideoList(containerID, OnVideoChoosenChanged) {
+  function renderVideoList(containerID, onVideoChoosenChanged) {
     return ReactDOM.render(
-        <VideoList OnVideoChoosenChanged={OnVideoChoosenChanged} />,
+        <VideoList OnVideoChoosenChanged={onVideoChoosenChanged} />,
+        getContainer(containerID)
+      );
+  }
+
+  function renderVideoDashboard(containerID, onDelete, onViewed) {
+    debugger;
+    return ReactDOM.render(
+        <VideoDashboard OnDelete={onDelete} />,
         getContainer(containerID)
       );
   }
 
   return {
     'renderChannelList': renderChannelList,
-    'renderVideoList': renderVideoList
+    'renderVideoList': renderVideoList,
+    'renderVideoDashboard': renderVideoDashboard
   }
 })();
