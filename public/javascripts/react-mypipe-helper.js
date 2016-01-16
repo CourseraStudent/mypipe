@@ -18,7 +18,6 @@ window.componentRenderHelper = (function() {
   }
 
   function renderVideoDashboard(containerID, onDelete, onViewed) {
-    debugger;
     return ReactDOM.render(
         <VideoDashboard OnDelete={onDelete} />,
         getContainer(containerID)
