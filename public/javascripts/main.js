@@ -129,8 +129,10 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function create(onPlayerReady){
     projekktor(playerElementSelector, {
       // poster: 'media/intro.png',
-      title: 'this is projekktor',
+      title: 'my pipe',
+      autoplay: true,
       playerFlashMP4: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
+      playerFlashMP3: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       width: 854,
       height: 480,   
       }, onPlayerReady);
@@ -159,14 +161,26 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function createPlayListFromArray(videos) {
     var playList = [];
     for(var i = 0; i < videos.length; i++) {
+
+      console.log(videos[i]);
+
+      var playFromYoutube = false;
+      var src = playFromYoutube ? 
+        'http://www.youtube.com/watch?v=' + videos[i].video.youtubeCode :
+        videos[i].src;
+      var type = playFromYoutube ? 
+        'video/youtube' : 
+        'video/mp4';
+
       playList.push( 
         {0:{
-          'src': videos[i].src, 
-          'type': 'video/mp4',
+          'src': src, 
+          'type': type,
           'channelId': videos[i].channelId,
           'video': videos[i].video
         }});
     }
+    console.log(playList);
     return playList;
   }
 
@@ -179,7 +193,7 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function setSingleVideoAndPlayNow(player, playList) {
     player.reset();
     player.setItem(playList[0], 0, true);
-    player.setPlay();
+    // player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
     if(player.getSource())
@@ -187,7 +201,7 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     for(var i = 0; i < playList.length; i++) {
       player.setItem(playList[i]);
     }
-    player.setPlay();
+    // player.setPlay();
   }
 
   function playSingle(videosInfo) {
