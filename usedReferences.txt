@@ -15,3 +15,9 @@
     http://expressjs.com/ru/4x/api.html#res.sendFile
     http://expressjs.com/ru/guide/routing.html
     http://jsman.ru/express/#route-params-preconditions
+
+  projekktor
+    http://www.projekktor.com/demos/cuepoints/
+    http://www.projekktor.com/docs/playlists
+    http://www.projekktor.com/demos/javascript/#
+    http://www.projekktor.com/docs/api#playeraddlistener_eventstring_callbackobjectvoid

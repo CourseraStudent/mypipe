@@ -17,9 +17,7 @@ router.get('/:channelId/:resourceId', function(req, res) {
 
   var relativePath = mypipefs.getFilePathByIds(req.params.channelId, req.params.resourceId);
   var absPath = path.join(__dirname, '../', relativePath);
-  console.log(absPath);
   res.sendFile(absPath);  
-  // res.json({'test': absPath});
 });
 
 

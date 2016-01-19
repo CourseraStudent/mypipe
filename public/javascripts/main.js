@@ -110,11 +110,9 @@ var playListHelper = (function(){
   }
   function createSingleVideoPlayList(channelId, video) {
     var baseUrl = "/channel/" + channelId + "/";
-    return {
-        'src': baseUrl + video.fileId,
-        'channelId': channelId,
-        'video': video
-    }
+    video.src = baseUrl + video.videoId;
+    video.channelId = channelId;
+    return video;
   }
 
   return {
@@ -126,22 +124,26 @@ var playListHelper = (function(){
 
 var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   var player = null;
-  function create(onPlayerReady){
+  var customPlayerReadyHandler = function(){};
+  function setCustomPlayerReadyHandler(handler) {
+    customPlayerReadyHandler = (function(p) {
+      handler(p);
+      customPlayerReadyHandler = function(){};
+    });
+  }
+  function createPlayer(){
     projekktor(playerElementSelector, {
       // poster: 'media/intro.png',
       title: 'my pipe',
       autoplay: true,
+      continuous: true,
+      controls: true,
+      volume: 0.5,
       playerFlashMP4: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       playerFlashMP3: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       width: 854,
       height: 480,   
-      }, onPlayerReady);
-  }
-  function ensurePlayer(onPlayerReady){
-    if(player) {
-      onPlayerReady(player);
-    } else {
-      create(function(p) { 
+      }, function(p) { 
         player = p;
         player.addListener('*',function(data) {
             if(data && data.file) {
@@ -149,21 +151,25 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
             }
           }
         );
-        onPlayerReady(player);
+        customPlayerReadyHandler(p);
       });
+  }
+  function ensurePlayer(onPlayerReady){
+    if(player) {
+      onPlayerReady(player);
+    } else {
+      setCustomPlayerReadyHandler(onPlayerReady)
+      createPlayer();
     }
   }
 
   function createPlayList(videos) {
     videos = videos instanceof Array ? videos : [videos];
-    return createPlayListFromArray(videos);
+    return createPlayListFromVideoArray(videos);
   }
-  function createPlayListFromArray(videos) {
+  function createPlayListFromVideoArray(videos) {
     var playList = [];
     for(var i = 0; i < videos.length; i++) {
-
-      console.log(videos[i]);
-
       var playFromYoutube = false;
       var src = playFromYoutube ? 
         'http://www.youtube.com/watch?v=' + videos[i].video.youtubeCode :
@@ -171,16 +177,13 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
       var type = playFromYoutube ? 
         'video/youtube' : 
         'video/mp4';
-
       playList.push( 
         {0:{
           'src': src, 
           'type': type,
-          'channelId': videos[i].channelId,
-          'video': videos[i].video
+          'video': videos[i]
         }});
     }
-    console.log(playList);
     return playList;
   }
 
@@ -193,15 +196,16 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function setSingleVideoAndPlayNow(player, playList) {
     player.reset();
     player.setItem(playList[0], 0, true);
-    // player.setPlay();
+    player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
-    if(player.getSource())
-      player.reset();
-    for(var i = 0; i < playList.length; i++) {
-      player.setItem(playList[i]);
-    }
-    // player.setPlay();
+    // console.log("<setPlayListAndPlayNow>");
+    // console.log(playList);
+    // console.log("</setPlayListAndPlayNow>");
+
+    player.setFile(playList);
+    // console.log(player.getPlaylist());
+    player.setPlay();
   }
 
   function playSingle(videosInfo) {
