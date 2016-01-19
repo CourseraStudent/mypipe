@@ -142,7 +142,10 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
       playerFlashMP4: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       playerFlashMP3: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       width: 854,
-      height: 480,   
+      height: 480,
+          68: function(player) {player.setDebug();},
+          67: function(player) {console.log('Config Dump', player.config);},
+      }],
       }, function(p) { 
         player = p;
         player.addListener('*',function(data) {
@@ -199,12 +202,8 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
-    // console.log("<setPlayListAndPlayNow>");
-    // console.log(playList);
-    // console.log("</setPlayListAndPlayNow>");
 
     player.setFile(playList);
-    // console.log(player.getPlaylist());
     player.setPlay();
   }
 
