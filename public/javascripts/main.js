@@ -131,6 +131,15 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
       customPlayerReadyHandler = function(){};
     });
   }
+  function eventFire(el, etype){
+    if (el.fireEvent) {
+      el.fireEvent('on' + etype);
+    } else {
+      var evObj = document.createEvent('Events');
+      evObj.initEvent(etype, true, false);
+      el.dispatchEvent(evObj);
+    }
+  }
   function createPlayer(){
     projekktor(playerElementSelector, {
       // poster: 'media/intro.png',
@@ -144,17 +153,24 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
       width: 854,
       height: 480,
       keys: [{
-          // 32: function(player) {player.setPlayPause();},
-          // 27: function(player) {player.setFullscreen(false);},
-          // 13: function(player) {player.setFullscreen(true);},
-          // 39: function(player) {player.setPlayhead('+5');},
-          // 37: function(player) {player.setPlayhead('-5');},
-          // 38: function(player) {player.setVolume('+5');},
-          // 40: function(player) {player.setVolume('-5');},
+          32: function(player) {player.setPlayPause();},
+          27: function(player) {player.setFullscreen(false);},
+          13: function(player) {player.setFullscreen(true);},
+          39: function(player) {player.setPlayhead('+5');},
+          37: function(player) {player.setPlayhead('-5');},
+          38: function(player) {player.setVolume('+5');},
+          40: function(player) {player.setVolume('-5');},
           68: function(player) {player.setDebug();},
           67: function(player) {console.log('Config Dump', player.config);},
-          80: function(player) {console.log('Schedule Dump', player.media);}//,
-          // 78: function(player) {console.log('player.setNex()'); player.setNex();}
+          75: function(player) {console.log('Schedule Dump', player.media);},
+          78: function(player) {
+            var nextButton = document.getElementsByClassName('ppnext');
+            eventFire(nextButton[0], 'click');
+          },
+          80: function(player) {
+            var nextButton = document.getElementsByClassName('ppprev');
+            eventFire(nextButton[0], 'click');
+          }
       }],
       }, function(p) { 
         player = p;
