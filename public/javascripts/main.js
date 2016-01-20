@@ -135,16 +135,26 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     projekktor(playerElementSelector, {
       // poster: 'media/intro.png',
       title: 'my pipe',
-      autoplay: true,
-      continuous: true,
-      controls: true,
-      volume: 0.5,
+      // autoplay: true,
+      // continuous: true,
+      // controls: true,
+      // volume: 0.5,
       playerFlashMP4: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       playerFlashMP3: 'swf/StrobeMediaPlayback/StrobeMediaPlayback.swf',
       width: 854,
       height: 480,
+      keys: [{
+          // 32: function(player) {player.setPlayPause();},
+          // 27: function(player) {player.setFullscreen(false);},
+          // 13: function(player) {player.setFullscreen(true);},
+          // 39: function(player) {player.setPlayhead('+5');},
+          // 37: function(player) {player.setPlayhead('-5');},
+          // 38: function(player) {player.setVolume('+5');},
+          // 40: function(player) {player.setVolume('-5');},
           68: function(player) {player.setDebug();},
           67: function(player) {console.log('Config Dump', player.config);},
+          80: function(player) {console.log('Schedule Dump', player.media);}//,
+          // 78: function(player) {console.log('player.setNex()'); player.setNex();}
       }],
       }, function(p) { 
         player = p;
@@ -202,8 +212,13 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
+    console.log("set playlist", playList);
+
+    if(player.getSource())
+      player.reset();
 
     player.setFile(playList);
+    console.log("get playlist", player.getPlaylist());
     player.setPlay();
   }
 
