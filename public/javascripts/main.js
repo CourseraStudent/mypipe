@@ -176,6 +176,14 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     }
   }
 
+  // HACK player doesn't want to work properly with new playlist
+  // but it seems  to be enough to destruct it and construct again
+  function playerSelfDestruct() { 
+    // player.reset();
+    player.selfDestruct();
+    player = null;
+  }
+
   function createPlayList(videos) {
     videos = videos instanceof Array ? videos : [videos];
     return createPlayListFromVideoArray(videos);
@@ -214,12 +222,17 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function setPlayListAndPlayNow(player, playList){
     console.log("set playlist", playList);
 
-    if(player.getSource())
-      player.reset();
+    function onCustormReady(p) {
+      p.setFile(playList);
+      console.log("get playlist", p.getPlaylist());
+      p.setPlay();
+    }
 
-    player.setFile(playList);
-    console.log("get playlist", player.getPlaylist());
-    player.setPlay();
+    if(player.getSource()) {
+      playerSelfDestruct();
+      ensurePlayer(onCustormReady);
+    } else 
+      onCustormReady(player);
   }
 
   function playSingle(videosInfo) {
