@@ -233,7 +233,7 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
   function setSingleVideoAndPlayNow(player, playList) {
     player.reset();
     player.setItem(playList[0], 0, true);
-    player.setPlay();
+    // player.setPlay();
   }
   function setPlayListAndPlayNow(player, playList){
     console.log("set playlist", playList);
@@ -241,7 +241,7 @@ var playerWrapper = (function(playerElementSelector, onPlayerVideoChanged){
     function onCustormReady(p) {
       p.setFile(playList);
       console.log("get playlist", p.getPlaylist());
-      p.setPlay();
+      // p.setPlay();
     }
 
     if(player.getSource()) {
