@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var mypipefs = require('mypipe-fs');
+var mypipefs = require('./model.js');
 var data = mypipefs('public/videos/');
 
 var routes = require('./routes/index');
