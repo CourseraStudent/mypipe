@@ -6,3 +6,6 @@
 
 # ignore MAC OS files
 .DS_Store
+
+# ignore wallpapers
+/public/stylesheets/theme.light/*.png

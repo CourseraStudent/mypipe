@@ -7,10 +7,4 @@ router.get('/', function(req, res, next) {
   res.render('index', { /*title: mypipefs.path*/ });
 });
 
-router.get('/v2/', function(req, res, next) {
-  var mypipefs = req.mypipefs;
-  res.render('index2', { /*title: mypipefs.path*/ });
-});
-
-
 module.exports = router;
